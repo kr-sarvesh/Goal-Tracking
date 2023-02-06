@@ -1,0 +1,17 @@
+{
+  "name": "goal-tracking-app",
+  "version": "1.0.0",
+  "description": "just a learning project",
+  "main": "index.js",
+  "scripts": {
+    "devStart": "nodemon server.js"
+  },
+  "author": "sarvesh-programmer",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
