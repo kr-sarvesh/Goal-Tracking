@@ -10,7 +10,7 @@ const {
 } = require('../controllers/goalController')
 
 /** create a goal routes */
-router.route('/api/create').post(createGoal)
+router.route('/api/goals').post(createGoal)
 
 /** get a goal routes */
 router.route('/api/goal/:id').get(getGoal)
