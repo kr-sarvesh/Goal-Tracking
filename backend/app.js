@@ -3,7 +3,7 @@ const express = require('express')
 const colors = require('colors')
 const app = express()
 const connectToDb = require('./config/db')
-const { errorHandler } = require('./middleware/errorMiddleware')
+const { errorHandler } = require('./middleware/errorHandler')
 // const cookieParser = require('cookie-parser')
 
 /**cookie-parser is a middleware that parses cookies attached to the client request object.*/
