@@ -1,7 +1,7 @@
 // Importing the Schema for CRUD operations
 const Goal = require('../models/goalModel')
-
-exports.createGoal = async (req, res) => {
+const asyncHandler = require('../middleware/errorHandler')
+exports.createGoal = asyncHandler(async (req, res) => {
   if (!req.body.text) {
     res.status(400)
     throw new Error('Please provide a text')
@@ -13,24 +13,24 @@ exports.createGoal = async (req, res) => {
     message: ' goal created',
     goal,
   })
-}
+})
 
-exports.getGoals = async (req, res) => {
+exports.getGoals = asyncHandler(async (req, res) => {
   const goals = await Goal.find()
   res.status(200).json({
     message: 'All Goals fetched',
 
     goals,
   })
-}
+})
 
-exports.getGoal = async (req, res) => {
+exports.getGoal = asyncHandler(async (req, res) => {
   res.status(200).json({
     message: 'goal fetched',
   })
-}
+})
 
-exports.updateGoal = async (req, res) => {
+exports.updateGoal = asyncHandler(async (req, res) => {
   const goal = await Goal.findById(req.params.id)
   if (!goal) {
     res.status(404)
@@ -38,7 +38,7 @@ exports.updateGoal = async (req, res) => {
   }
   const updatedGoal = await Goal.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
-  })
+  }))
 
   res.status(200).json({
     message: 'goal updated',
@@ -46,7 +46,7 @@ exports.updateGoal = async (req, res) => {
   })
 }
 
-exports.deleteGoal = async (req, res) => {
+exports.deleteGoal = asyncHandler(async (req, res) => {
   const goal = await Goal.findById(req.params.id)
   if (!goal) {
     res.status(404)
@@ -57,4 +57,4 @@ exports.deleteGoal = async (req, res) => {
   res.status(200).json({
     id: req.params.id,
   })
-}
+})
