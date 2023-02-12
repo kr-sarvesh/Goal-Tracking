@@ -12,7 +12,7 @@ const { errorHandler } = require('./middleware/errorMiddleware')
 
 /** Importing all the routes here */
 const goalRouter = require('./routers/goalRoutes')
-
+const userRouter = require('./routers/userRoutes')
 /** Connecting to the Database */
 connectToDb()
 
@@ -26,6 +26,7 @@ app.use(express.urlencoded({ extended: true }))
 
 // Router Middlewares
 app.use('/', goalRouter)
+app.use('/api/users', userRouter)
 // app.use('/', authRouter)
 
 /** Error Handler */
