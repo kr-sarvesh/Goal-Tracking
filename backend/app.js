@@ -26,7 +26,7 @@ app.use(express.urlencoded({ extended: true }))
 
 // Router Middlewares
 app.use('/', goalRouter)
-app.use('/api/users', userRouter)
+app.use('/', userRouter)
 // app.use('/', authRouter)
 
 /** Error Handler */
