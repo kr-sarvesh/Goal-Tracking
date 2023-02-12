@@ -31,13 +31,30 @@ exports.getGoal = async (req, res) => {
 }
 
 exports.updateGoal = async (req, res) => {
+  const goal = await Goal.findById(req.params.id)
+  if (!goal) {
+    res.status(404)
+    throw new Error('goal not found')
+  }
+  const updatedGoal = await Goal.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+  })
+
   res.status(200).json({
-    message: `goal got updated is ${req.params.id}`,
+    message: 'goal updated',
+    updatedGoal,
   })
 }
 
 exports.deleteGoal = async (req, res) => {
+  const goal = await Goal.findById(req.params.id)
+  if (!goal) {
+    res.status(404)
+    throw new Error('goal not found')
+  }
+  await goal.remove()
+
   res.status(200).json({
-    message: `Goal got deleted `,
+    id: req.params.id,
   })
 }
