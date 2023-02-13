@@ -39,9 +39,24 @@ exports.registerUser = asyncHandler(async (req, res) => {
 })
 
 exports.loginUser = asyncHandler(async (req, res) => {
-  res.json({
-    message: 'Login User',
-  })
+  // checking for the email and password
+  const { email, password } = req.body
+  if (!email || !password) {
+    res.status(400)
+    throw new Error('Please enter all fields')
+  }
+  // check if the user exists
+  const user = await User.findOne({ email })
+  if (user && (await bcrypt.compare(password, user.password))) {
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+    })
+  } else {
+    res.status(401)
+    throw new Error('Invalid email or password')
+  }
 })
 exports.getMe = asyncHandler(async (req, res) => {
   res.json({
