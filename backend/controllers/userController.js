@@ -61,16 +61,19 @@ exports.loginUser = asyncHandler(async (req, res) => {
   }
 })
 
-// Generate JWT
+exports.getMe = asyncHandler(async (req, res) => {
+  const { _id, name, email } = await User.findById(req.user.id)
 
+  res.json({
+    id: _id,
+    name,
+    email,
+  })
+})
+
+// Generate JWT
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: '30d',
   })
 }
-
-exports.getMe = asyncHandler(async (req, res) => {
-  res.json({
-    message: 'Get Me',
-  })
-})

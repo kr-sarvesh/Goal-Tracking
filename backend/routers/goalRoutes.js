@@ -9,20 +9,22 @@ const {
   deleteGoal,
 } = require('../controllers/goalController')
 
+const { protect } = require('../middleware/authMiddleware')
+
 /** create a goal routes */
-router.route('/api/goals').post(createGoal)
+router.route('/api/goals').post(protect, createGoal)
 
 /** get a goal routes */
-router.route('/api/goal/:id').get(getGoal)
+router.route('/api/goal/:id').get(protect, getGoal)
 
 /** get all goals routes */
-router.route('/api/goals').get(getGoals)
+router.route('/api/goals').get(protect, getGoals)
 
 /** update a goal routes */
-router.route('/api/goal/:id').put(updateGoal)
+router.route('/api/goal/:id').put(protect, updateGoal)
 
 /** delete a goal routes */
-router.route('/api/goal/:id').delete(deleteGoal)
+router.route('/api/goal/:id').delete(protect, deleteGoal)
 
 /** exporting the routes */
 module.exports = router
