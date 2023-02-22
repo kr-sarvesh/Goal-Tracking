@@ -4,11 +4,10 @@ const colors = require('colors')
 const app = express()
 const connectToDb = require('./config/db')
 const { errorHandler } = require('./middleware/errorHandler')
-// const cookieParser = require('cookie-parser')
 
 /**cookie-parser is a middleware that parses cookies attached to the client request object.*/
 
-// const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser')
 
 /** Importing all the routes here */
 const goalRouter = require('./routers/goalRoutes')
@@ -19,7 +18,7 @@ connectToDb()
 /** Middlewares */
 app.use(express.json())
 
-// app.use(cookieParser())
+app.use(cookieParser())
 
 /** Accepting the form data */
 app.use(express.urlencoded({ extended: true }))
