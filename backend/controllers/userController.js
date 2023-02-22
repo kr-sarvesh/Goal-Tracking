@@ -28,7 +28,7 @@ exports.registerUser = asyncHandler(async (req, res) => {
   })
   if (user) {
     res.status(201).json({
-      _id: user._id,
+      _id: user.id,
       name: user.name,
       email: user.email,
       token: generateToken(user._id),
@@ -38,7 +38,9 @@ exports.registerUser = asyncHandler(async (req, res) => {
     throw new Error('Invalid user data')
   }
 })
-
+/**
+ * @desc    Login user
+ */
 exports.loginUser = asyncHandler(async (req, res) => {
   // checking for the email and password
   const { email, password } = req.body
@@ -48,23 +50,38 @@ exports.loginUser = asyncHandler(async (req, res) => {
   }
   // check if the user exists
   const user = await User.findOne({ email })
+  //comparing the plain password and the hashed password
   if (user && (await bcrypt.compare(password, user.password))) {
-    res.json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      token: generateToken(user._id),
-    })
+    // res.json({
+    //   _id: user._id,
+    //   name: user.name,
+    //   email: user.email,
+    //   token: generateToken(user._id),
+    // })
+
+    // If you want to use cookies
+    const options = {
+      expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+      httpOnly: true,
+    }
+    res
+      .status(200)
+      .cookie('token', generateToken(user._id), options)
+      .json({
+        success: true,
+        token: generateToken(user._id),
+        user,
+      })
+    console.log('user is id and _id' + user._id)
   } else {
-    res.status(401)
     throw new Error('Invalid email or password')
   }
 })
 
 exports.getMe = asyncHandler(async (req, res) => {
+  console.log('hello')
   const { _id, name, email } = await User.findById(req.user.id)
-
-  res.json({
+  res.status(200).json({
     id: _id,
     name,
     email,
