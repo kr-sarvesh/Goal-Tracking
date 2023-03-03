@@ -1,10 +1,12 @@
 // deal with reducer and initial state
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import authService from '../../services/authService'
+import authService from './authService'
+
 // If you want to use json web token
 const user = JSON.parse(localStorage.getItem('user'))
 
+//initail state
 const initialState = {
   user: user ? user : null,
   isError: false,
@@ -16,6 +18,7 @@ const initialState = {
 // Register user (deal with async function/ backround process)
 // first argument with string name of the action
 // second argument is a function that accepts two arguments: user payload and thunkAPI
+
 export const register = createAsyncThunk(
   'auth/registerUser',
   async (user, thunkAPI) => {
@@ -34,6 +37,7 @@ export const register = createAsyncThunk(
 )
 
 // createSlice function accepts an initial state, an object of reducer functions, and a "slice name", and automatically generates action creators and action types that correspond to the reducers and state.
+
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -48,16 +52,18 @@ export const authSlice = createSlice({
       state.message = ''
     },
   },
+
   // Accounting for the pending state, fulfilled state, and rejected state goes in extraReducers since its a AsyncThunk function
+
   extraReducers: (builder) => {
     builder
       .addCase(register.pending, (state) => {
         state.isLoading = true
       })
+
       .addCase(register.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-
         state.user = action.payload
       })
 
@@ -69,6 +75,7 @@ export const authSlice = createSlice({
       })
   },
 })
+
 // exporting reset inside the authSlice that way we can bring reset into components where we want to be fired off
 export const { reset } = authSlice.actions
 export default authSlice.reducer

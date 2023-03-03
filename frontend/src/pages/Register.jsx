@@ -1,7 +1,12 @@
 import { useState } from 'react'
 import { FaUser } from 'react-icons/fa'
-import { Link } from 'react-router-dom'
+// useselector selects something from states
+// useDispatch is used to dispatch an action like register ,asyncthunk function, reset function
+import { useSelector, useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
+import { register, reset } from '../features/auth/authSlice'
+// To store the data to send to the backend
 function Register() {
   const [formData, setFormData] = useState({
     name: '',
@@ -11,6 +16,13 @@ function Register() {
   })
   //   Destructuring the formData
   const { name, email, password, password2 } = formData
+
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  // useSelector is used to select something from the state
+  const { user, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.auth
+  )
 
   //   onChange function
   const onChange = (e) => {
@@ -25,6 +37,14 @@ function Register() {
     //password matching validation
     if (password !== password2) {
       toast.error('Passwords do not match')
+    } else {
+      const userData = {
+        name,
+        email,
+        password,
+      }
+      //   dispatching the register action
+      dispatch(register(userData))
     }
   }
   return (
