@@ -1,7 +1,11 @@
-import { useState } from 'react'
-import { FaSignInAlt } from 'react-icons/fa'
-import { Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
 import { toast } from 'react-toastify'
+import { FaSignInAlt } from 'react-icons/fa'
+import { useSelector, useDispatch } from 'react-redux'
+import { login, reset } from '../features/auth/authSlice'
+import { useNavigate } from 'react-router-dom'
+import Spinner from '../components/Spinner'
+
 function Login() {
   const [formData, setFormData] = useState({
     email: '',
@@ -9,6 +13,27 @@ function Login() {
   })
   //   Destructuring the formData
   const { email, password } = formData
+
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const { user, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.auth
+  )
+
+  // useEffect
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message)
+    }
+    // Redirect when logged in
+    if (isSuccess || user) {
+      navigate('/')
+    }
+
+    dispatch(reset())
+  }, [isError, isSuccess, user, message, navigate, dispatch])
 
   //   onChange function
   const onChange = (e) => {
@@ -20,6 +45,15 @@ function Login() {
   //   onSubmit function
   const onSubmit = (e) => {
     e.preventDefault()
+    const userData = {
+      email,
+      password,
+    }
+
+    dispatch(login(userData))
+  }
+  if (isLoading) {
+    return <Spinner />
   }
   return (
     <>
@@ -27,8 +61,9 @@ function Login() {
         <h1>
           <FaSignInAlt /> Login
         </h1>
-        <p>Please LogIn</p>
+        <p>Login and start setting goals</p>
       </section>
+
       <section className='form'>
         <form onSubmit={onSubmit}>
           <div className='form-group'>
@@ -38,9 +73,8 @@ function Login() {
               id='email'
               name='email'
               value={email}
-              onChange={onChange}
               placeholder='Enter your email'
-              required
+              onChange={onChange}
             />
           </div>
           <div className='form-group'>
@@ -50,9 +84,8 @@ function Login() {
               id='password'
               name='password'
               value={password}
+              placeholder='Enter password'
               onChange={onChange}
-              placeholder='Enter your password'
-              required
             />
           </div>
 
@@ -66,4 +99,5 @@ function Login() {
     </>
   )
 }
+
 export default Login
