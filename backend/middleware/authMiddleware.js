@@ -3,7 +3,7 @@ const asyncHandler = require('express-async-handler')
 
 // protect function
 const protect = asyncHandler(async (req, res, next) => {
-  console.log('cookies is ' + req.cookies.token)
+  // console.log('cookies is ' + req.cookies.token)
   //Get token
   const token =
     req.cookies.token ||

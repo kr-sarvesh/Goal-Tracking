@@ -59,6 +59,8 @@ exports.loginUser = asyncHandler(async (req, res) => {
     //   token: generateToken(user._id),
     // })
 
+    user.password = undefined
+
     // If you want to use cookies
     const options = {
       expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
@@ -70,17 +72,17 @@ exports.loginUser = asyncHandler(async (req, res) => {
       .json({
         success: true,
         token: generateToken(user._id),
-        user,
+        name: user.name,
       })
-    console.log('user is id and _id' + user._id)
   } else {
+    res.status(401)
     throw new Error('Invalid email or password')
   }
 })
 
 exports.getMe = asyncHandler(async (req, res) => {
   console.log('hello')
-  const { _id, name, email } = await User.findById(req.user.id)
+  // const { _id, name, email } = await User.findById(req.user.id)
   res.status(200).json({
     id: _id,
     name,
