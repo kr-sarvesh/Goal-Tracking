@@ -8,7 +8,11 @@ function Dashboard() {
   const dispatch = useDispatch()
 
   const { user } = useSelector((state) => state.auth)
-
+  useEffect(() => {
+    if (!user) {
+      navigate('/login')
+    }
+  }, [user, navigate])
   return (
     <>
       <section className='heading'>
