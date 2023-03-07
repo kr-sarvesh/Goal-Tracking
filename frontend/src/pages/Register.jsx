@@ -1,12 +1,15 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { FaUser } from 'react-icons/fa'
 // useselector selects something from states
-// useDispatch is used to dispatch an action like register ,asyncthunk function, reset function
+// useDispatch is used to dispatch an action like register, asyncthunk function, reset function,
 import { useSelector, useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import { register, reset } from '../features/auth/authSlice'
+import Spinner from '../components/Spinner'
+
 // To store the data to send to the backend
+
 function Register() {
   const [formData, setFormData] = useState({
     name: '',
@@ -24,6 +27,21 @@ function Register() {
     (state) => state.auth
   )
 
+  //   useEffect is used to run a function when a state changes
+  useEffect(() => {
+    if (isError) {
+      toast.error(message)
+      // dispatch(reset())
+    }
+    // Redirect when logged in
+    if (isSuccess || user) {
+      toast.success(message)
+      dispatch(reset())
+      navigate('/')
+    }
+    dispatch(reset())
+  }, [user, isError, isSuccess, message, navigate, dispatch])
+
   //   onChange function
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -34,7 +52,8 @@ function Register() {
   //   onSubmit function
   const onSubmit = (e) => {
     e.preventDefault()
-    //password matching validation
+
+    //password matching Validation
     if (password !== password2) {
       toast.error('Passwords do not match')
     } else {
@@ -44,11 +63,16 @@ function Register() {
         password,
       }
       //   dispatching the register action
+      //dispatch is used to dispatch an action
       dispatch(register(userData))
     }
   }
+  //   is loading check
+  if (isLoading) {
+    return <Spinner />
+  }
   return (
-    <>
+    <div>
       <section className='heading'>
         <h1>
           <FaUser /> Register
@@ -65,7 +89,7 @@ function Register() {
               name='name'
               value={name}
               onChange={onChange}
-              placeholder='Enter your name'
+              placeholder='Enter your Name'
               required
             />
           </div>
@@ -112,7 +136,8 @@ function Register() {
           </div>
         </form>
       </section>
-    </>
+    </div>
   )
 }
+
 export default Register
