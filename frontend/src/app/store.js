@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 import authReducer from '../features/auth/authSlice'
+import goalReducer from '../features/goals/goalSlice'
 
 // The store now has redux-thunk added in and the Redux DevTools Extension is turned on
 
@@ -8,5 +9,6 @@ import authReducer from '../features/auth/authSlice'
 export const store = configureStore({
   reducer: {
     auth: authReducer,
+    goals: goalReducer,
   },
 })
